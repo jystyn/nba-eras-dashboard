@@ -15,7 +15,7 @@ const eras = [
     'After MJ Debut (>=1985)'
 ];
 
-let state_data, era_data, ten_list, header_list, stat_list, era, state;
+let state_data, era_data, ten_list, header_list, stat_list, era, state, players;
 let ten_gp, ten_pts, ten_reb, ten_assists, ten_blocks, ten_stl, ten_fg, ten_fga, ten_3p, ten_3pa, ten_ft, ten_fta, ten_to, ten_pf;
 
 
@@ -65,7 +65,7 @@ function init() {
     era = eras[0];
     // console.log(`Players born in ${state}, ${era}`);
     // displayData(state)
-    initMap(state);
+    // initMap(state);
     topFiveCities(state);
     topTenCharts(state);
     return era, state;
@@ -129,7 +129,7 @@ function initMap(state_abbrev){
                 `);
                 playerMarkers.push(player_marker);
             }
-            let players = L.layerGroup(playerMarkers)
+            players = L.layerGroup(playerMarkers)
             createMap(players);
     })
 }
@@ -229,10 +229,10 @@ function topFiveCities(state_abbrev) {
         city_count = d3.group(state_data, d => d.city)
         top_cities = d3.sort(city_count, (a, b) => d3.descending(a[1], b[1]))
         top_five_cities = Array.from(top_cities).slice(0, 5);
-        // console.log(top_five_cities)
+        console.log(top_five_cities)
 
         for (i = 0; i < top_five_cities.length; i++) {
-            displayCities.append('ul').text(`${i + 1}. ${top_five_cities[i][0].replace('_', ' ')} (${top_five_cities[i][1].length}) `)
+            displayCities.append('ul').text(`${i + 1}. ${top_five_cities[i][0].replace('_', ' ')}, ${top_five_cities[i][1][0].state} (${top_five_cities[i][1].length}) `)
         }
 
     })
@@ -249,9 +249,10 @@ function optionChanged(new_state) {
         state = new_state;
         console.log(`Players born in ${state}, ${era}`);
         // Clear Tables before refilli
+        
         displayCities.html('');
         topTenChart.html('');
-        initMap(state);
+        // initMap(state);
         topFiveCities(new_state);
         topTenCharts(new_state);
 
@@ -268,6 +269,7 @@ function eraChanged(new_era) {
         era = new_era
         console.log(`Players born in ${state}, ${era}`);
         // Clear Tables before refilli
+        
         displayCities.html('');
         topTenChart.html('');
         initMap(state);
